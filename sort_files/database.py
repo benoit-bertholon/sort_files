@@ -38,14 +38,18 @@ def get_dbsession(sqlite_dbfile):
 Meg = 1024*1024*1024 
 
 def compute_sha256(file_abs_path):
-	with open(file_abs_path,'rb') as fichier:
-		m = hashlib.sha256()
-		while True:
-			data = fichier.read(Meg)
-			if not data:
-				break
-			m.update(data)
-		hash_ = m.hexdigest()
+	m = hashlib.sha256()
+	if os.path.islink(file_abs_path):
+		value = bytes(os.readlink(file_abs_path), "utf-8")
+		m.update(value)
+	else:        
+		with open(file_abs_path,'rb') as fichier:
+			while True:
+				data = fichier.read(Meg)
+				if not data:
+					break
+				m.update(data)
+	hash_ = m.hexdigest()
 	return hash_
 
 def get_files_with_same_hash_from_abs_path(dbsession, file_abs_path):
