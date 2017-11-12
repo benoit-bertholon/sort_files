@@ -35,7 +35,7 @@ def get_dbsession(sqlite_dbfile):
 	 
 	DBSession = sessionmaker(bind=engine)
 	return DBSession()
-Meg = 1024*1024*1024 
+HundredMeg = 100*1024*1024 
 
 def compute_sha256(file_abs_path):
 	m = hashlib.sha256()
@@ -45,7 +45,7 @@ def compute_sha256(file_abs_path):
 	else:        
 		with open(file_abs_path,'rb') as fichier:
 			while True:
-				data = fichier.read(Meg)
+				data = fichier.read(HundredMeg)
 				if not data:
 					break
 				m.update(data)
@@ -53,9 +53,9 @@ def compute_sha256(file_abs_path):
 	return hash_
 
 def get_files_with_same_hash_from_abs_path(dbsession, file_abs_path):
-	hash = compute_sha256(file_abs_path)
-	res = dbsession.query(File).filter(File.hash == hash).all()
-	return res
+	hash_ = compute_sha256(file_abs_path)
+	res = dbsession.query(File).filter(File.hash == hash_).all()
+	return res, hash_
 
 def get_files_from_hash(dbsession, hashvalue):
 	res = dbsession.query(File).filter(File.hash == hashvalue).all()

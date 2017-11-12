@@ -3,7 +3,7 @@ import argparse
 import os
 import sys
 import hashlib
-from database import *
+from sort_files.database import *
 
 def remove_from_db():
     
@@ -24,10 +24,10 @@ def remove_from_db():
     if dbfile == None:
         args.help()
         sys.exit(1)
-    print "DB file: ", dbfile
+    print ("DB file: ", dbfile)
 
     sqlite_dbfile = 'sqlite:///'+dbfile
-    print "db:", sqlite_dbfile
+    print ("db:", sqlite_dbfile)
     dbsession = get_dbsession(sqlite_dbfile)
 
     
@@ -52,7 +52,7 @@ def remove_from_db():
                     if f2.hash == hash:
                         ihavethisfile = True
                         if args.verbose > 1:
-                            print "it is here" , f2.path
+                            print ("it is here" , f2.path)
                         break
             if not ihavethisfile:
                 print(f.path, "with hash",f.hash,"not present in db elsewhere")

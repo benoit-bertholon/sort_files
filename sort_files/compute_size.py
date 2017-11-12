@@ -3,7 +3,7 @@ import argparse
 import os
 import sys
 import hashlib
-from database import *
+from sort_files.database import *
     
 def compute_size()
     parser = argparse.ArgumentParser(description='compare hash of the file and in the db')
@@ -43,7 +43,7 @@ def compute_size()
             size += os.path.getsize(f.path)
     print("missing: ", num_missing)
     print("num files:" , i)
-    print("size:", size,"B",  "%.2f MB", size/(1024.**2))
+    print("size:", size,"B",  "%.2f MB" %(size/(1024.**2)))
     
 
 if __name__ == "__main__":
