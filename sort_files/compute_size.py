@@ -5,7 +5,7 @@ import sys
 import hashlib
 from sort_files.database import *
     
-def compute_size()
+def compute_size():
     parser = argparse.ArgumentParser(description='compare hash of the file and in the db')
     parser.add_argument('--sqlitedb', dest='sqlitedb', default=None,
                         help='db folder (absolute), by defautl is [folder].files.db')

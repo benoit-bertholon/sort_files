@@ -37,7 +37,7 @@ def check_integrity():
         sys.stdout.write("\r%.2f   \t % 20s \t % 20s  \t % 20s " % (i * 100. /  len_file_names, "good:%d" % num_good, "bad:%d" % num_bad, "missing:%d"%num_missing))
         sys.stdout.flush()
 
-         if not os.path.isfile(f.path):
+        if not os.path.isfile(f.path):
             num_missing += 1
             if args.verbose > 0:
                 print ("missing:", f.path)
