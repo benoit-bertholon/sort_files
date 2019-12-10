@@ -18,7 +18,7 @@ def store_hash():
 
     args = parser.parse_args()
     print(args.verbose)
-    folder = os.path.abspath(args.folder)
+    folder = os.path.realpath(os.path.abspath(args.folder))
     if not  os.path.isdir(folder):
         print ("the folder argument should be an existing folder")
         sys.exit(1)

@@ -3,6 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os 
 import hashlib
+from sqlalchemy import update
 
 Base = declarative_base()
 
@@ -24,6 +25,11 @@ class File(Base):
     name = Column(Text, nullable=False)
     path = Column(Text, nullable=False,index=True, unique=True)
     hash = Column(String(128), nullable=False,index=True)
+    
+    def __eq__(self, f):
+        if f.path == self.path:
+            print(f.name == self.name and f.path == self.path and f.hash == self.hash)
+        return f.name == self.name and f.path == self.path and f.hash == self.hash
 
 def get_dbsession(sqlite_dbfile):
 	print (sqlite_dbfile)
@@ -78,3 +84,10 @@ def  insert_if_not_present(dbsession, file_abs_path):
 		dbsession.commit()
 		return 1
 	return 0
+	
+	
+def change_path(dbsession, file_abs_path, new_file_path):
+    dbsession.update().where(dbsession.c.path==file_abs_path).values(path=new_file_path)
+    print("update", file_abs_path , new_file_path)
+    dbsession.commit()
+        

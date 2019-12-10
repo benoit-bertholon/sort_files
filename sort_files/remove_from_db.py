@@ -42,24 +42,33 @@ def remove_from_db():
         sys.stdout.flush()
 
         if not os.path.isfile(f.path):
+            dbsession.delete(f)
             if args.verbose > 0:
                 print (f.path, "not an existing file")
+        if os.path.realpath(f.path) != f.path:
+            f.path == os.path.realpath(f.path)
+            dbsession.commit()
+        if os.path.isfile(f.path):
             same_files = get_files_from_hash(dbsession, f.hash)
-            ihavethisfile = False
-            for f2 in same_files:
-                if os.path.isfile(f2.path) :
-                    hash = compute_sha256(f2.path)
-                    if f2.hash == hash:
-                        ihavethisfile = True
-                        if args.verbose > 1:
-                            print ("it is here" , f2.path)
-                        break
-            if not ihavethisfile:
-                print(f.path, "with hash",f.hash,"not present in db elsewhere")
-            if args.remove:
-                print("remove file entry", f.path)
-                dbsession.delete(f)
-                dbsession.commit()
+            if len(same_files) >= 2:
+                for f2 in same_files[1:]:
+                    if os.path.realpath(f2.path) != f2.path:
+                        if os.path.realpath(f2.path) == f.path:
+                            print("remove file entry", f2.path, "same here", f.path)
+                            dbsession.delete(f2)
+                            dbsession.commit()
+                    if os.path.isfile(f2.path) :
+                        hash = compute_sha256(f2.path)
+                        if f2.hash == hash:
+                            ihavethisfile = True
+                            if args.verbose > 1:
+                                print (f.path, "it is here" , f2.path)
+                            break
+                        if args.remove:
+                            print("remove file entry", f2.path)
+                            dbsession.delete(f2)
+                            dbsession.commit()
+    dbsession.commit()
 
 
 if __name__ == "__main__":
